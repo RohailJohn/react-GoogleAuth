@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { gapi } from "gapi-script";
+const clientId = "Your-Client-Id";
 
 function App() {
+  const [showloginButton, setShowloginButton] = useState(true);
+  const [showlogoutButton, setShowlogoutButton] = useState(false);
+  const onLoginSuccess = (res) => {
+    console.log("Login Success:", res.profileObj);
+    setShowloginButton(false);
+    setShowlogoutButton(true);
+  };
+
+  const onLoginFailure = (res) => {
+    console.log("Login Failed:", res);
+  };
+
+  const onSignoutSuccess = () => {
+    alert("You have been logged out successfully");
+    console.clear();
+    setShowloginButton(true);
+    setShowlogoutButton(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {showloginButton ? (
+        <GoogleLogin
+          clientId={clientId}
+          buttonText="Sign In"
+          onSuccess={onLoginSuccess}
+          onFailure={onLoginFailure}
+          cookiePolicy={"single_host_origin"}
+          isSignedIn={true}
+        />
+      ) : null}
+
+      {showlogoutButton ? (
+        <GoogleLogout
+          clientId={clientId}
+          buttonText="Sign Out"
+          onLogoutSuccess={onSignoutSuccess}
+        ></GoogleLogout>
+      ) : null}
     </div>
   );
 }
-
 export default App;

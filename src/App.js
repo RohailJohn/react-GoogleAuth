@@ -25,6 +25,7 @@ function App() {
 
   return (
     <div>
+      <h1>GoogleAuth</h1>
       {showloginButton ? (
         <GoogleLogin
           clientId={clientId}
